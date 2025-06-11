@@ -1,24 +1,18 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $targetDir = "images/";
-    $file = $_FILES['image'];
+$uploadDir = 'images/';
 
-    if (!in_array(mime_content_type($file['tmp_name']), ['image/jpeg', 'image/png'])) {
-        echo "Invalid file type.";
-        exit;
-    }
-
-    if ($file['size'] > 5 * 1024 * 1024) {
-        echo "File size exceeds 5MB.";
-        exit;
-    }
-
-    $filename = uniqid() . '_' . basename($file['name']);
-    $targetFile = $targetDir . $filename;
-
-    if (move_uploaded_file($file['tmp_name'], $targetFile)) {
-        echo "success";
-    } else {
-        echo "Upload failed.";
-    }
+if (!file_exists($uploadDir)) {
+    mkdir($uploadDir, 0777, true);
 }
+
+if (!empty($_FILES['images']['name'][0])) {
+    foreach ($_FILES['images']['tmp_name'] as $index => $tmpName) {
+        $filename = basename($_FILES['images']['name'][$index]);
+        $targetFile = $uploadDir . $filename;
+        move_uploaded_file($tmpName, $targetFile);
+    }
+    echo "Images uploaded successfully.";
+} else {
+    echo "No files uploaded.";
+}
+?> 
