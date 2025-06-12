@@ -67,11 +67,11 @@ if (!empty($_FILES['images']['name'][0])) {
 
     // Final message
     if (empty($errors)) {
-        echo "✅ All files uploaded successfully.";
+        echo " All files uploaded successfully.";
     } else {
-        echo "⚠️ Some errors occurred:<br>" . implode("<br>", $errors);
+        echo "Some errors occurred:<br>" . implode("<br>", $errors);
     }
 } else {
-    echo "⚠️ No files uploaded.";
+    echo " No files uploaded.";
 }
 ?>
