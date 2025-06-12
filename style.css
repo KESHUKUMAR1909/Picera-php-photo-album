@@ -1,9 +1,15 @@
-body{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
 }
-/* Upload Form Styles */
+
+h1 {
+  margin-top: 20px;
+}
+
+/* Upload Form */
 #uploadForm {
   display: flex;
   flex-direction: column;
@@ -19,14 +25,8 @@ body{
   background-color: #f9f9f9;
   width: 80%;
   max-width: 350px;
-  transition: border-color 0.3s ease;
 }
 
-#imageInput:hover {
-  border-color: #007bff;
-}
-
-/* Message Styling */
 #message {
   font-size: 14px;
   color: #333;
@@ -34,37 +34,26 @@ body{
   text-align: center;
 }
 
-/* General Button Style */
-button,
-.btn {
+button {
   padding: 10px 20px;
   background-color: #007bff;
-  border: none;
-  color: #fff;
+  color: white;
   font-weight: bold;
+  border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-button:hover,
-.btn:hover {
+button:hover {
   background-color: #0056b3;
 }
 
-/* Create Album and Nav Buttons */
 #createAlbumBtn,
 #prevPage,
 #nextPage {
   margin: 15px 10px;
-  padding: 10px 20px;
   background: linear-gradient(135deg, #007bff, #00c6ff);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 #createAlbumBtn:hover,
@@ -73,42 +62,20 @@ button:hover,
   background: linear-gradient(135deg, #0056b3, #0096c7);
 }
 
-/* Center Buttons Responsively */
-.controls {
-  text-align: center;
-  margin-top: 20px;
-}
-
-/* Responsive for small screens */
-@media (max-width: 480px) {
-  button,
-  .btn,
-  #createAlbumBtn,
-  #prevPage,
-  #nextPage {
-    width: 80%;
-    padding: 10px;
-    font-size: 15px;
-  }
-
-  #imageInput {
-    width: 90%;
-  }
-}
-/* Book container with 3D perspective */
+/* Album (Book) */
 .book {
-  width: 60%;
-
-  max-width: 400px; /* Reduced from 600px */
-  height: 300px;     /* Reduced from 400px */
-  perspective: 800px;
+  width: 30%;
+  max-width: 600px;
+  height: 400px;
+  perspective: 1200px;
   margin: 30px auto;
   position: relative;
   left: 20%;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border: 2px solid salmon;
+  border-radius: 10px;
 }
 
-/* Each page in the book */
+/* Page container */
 .page {
   width: 100%;
   height: 100%;
@@ -116,7 +83,6 @@ button:hover,
   transform-style: preserve-3d;
   transform-origin: left center;
   transition: transform 1s ease;
-  box-shadow: 0 0 10px rgba(0,0,0,0.05);
 }
 
 /* Flip effect */
@@ -124,7 +90,7 @@ button:hover,
   transform: rotateY(-180deg);
 }
 
-/* Front and back sides of the page */
+/* Front and Back */
 .front, .back {
   position: absolute;
   width: 100%;
@@ -142,10 +108,10 @@ button:hover,
 
 .back {
   transform: rotateY(180deg);
-  background: #fafafa;
+  background-color: #f0f0f0;
 }
 
-/* Column that holds 3 images */
+/* Images in a column */
 .column {
   display: flex;
   flex-direction: column;
@@ -162,46 +128,13 @@ button:hover,
   object-fit: cover;
   margin: 5px 0;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-/* Gray background if column has empty images */
-.column:has(.empty-image) {
-  background-color: #f0f0f0;
-}
-
-/* Buttons Styling */
-#controls {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 20px;
-  flex-wrap: wrap;
-}
-
-#controls button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: background 0.3s ease;
-}
-
-#controls button:hover {
-  background-color: #0056b3;
-}
-
-/* Responsive adjustments */
+/* Responsive */
 @media (max-width: 768px) {
   .book {
     height: 300px;
-  }
-  .column img {
-    height: 28%;
   }
 }
 
@@ -209,8 +142,17 @@ button:hover,
   .book {
     height: 250px;
   }
+
+  #imageInput {
+    width: 90%;
+  }
+
+  button {
+    width: 80%;
+  }
+
   .column img {
-    height: 27%;
     width: 95%;
+    height: 27%;
   }
 }

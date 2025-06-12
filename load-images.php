@@ -1,6 +1,7 @@
 <?php
-$images = array_values(array_filter(scandir('images'), function ($file) {
-  return preg_match('/\.(jpg|jpeg|png)$/i', $file);
-}));
-echo json_encode($images);
+$dir = "images/";
+$images = array_filter(scandir($dir), function ($file) use ($dir) {
+    return in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png']);
+});
+echo json_encode(array_values($images));
 ?>

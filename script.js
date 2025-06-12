@@ -7,19 +7,20 @@ document.addEventListener("DOMContentLoaded", function () {
   const nextPageBtn = document.getElementById('nextPage');
   const message = document.getElementById('message');
   const maxFiles = 10;
-  let albumCreated = false;
-  let currentPage = 0;
 
-  // Limit files to 20 on selection
+  let currentPage = 0;
+  let pages = [];
+
+  // Validate file count
   imageInput.addEventListener('change', function () {
     message.textContent = '';
     if (this.files.length > maxFiles) {
       alert(`You can only upload up to ${maxFiles} files at once.`);
-      this.value = ""; // Clear the input
+      this.value = "";
     }
   });
 
-  // Handle file upload
+  // Upload images
   uploadForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     message.textContent = 'Uploading...';
@@ -32,41 +33,43 @@ document.addEventListener("DOMContentLoaded", function () {
         body: formData
       });
       const data = await res.text();
-      message.textContent = data;
+      message.innerHTML = data;
+
+      alert(" Images uploaded successfully! Now click 'Create Album' to refresh.");
+      imageInput.value = ""; // Clear selected files
     } catch (error) {
       console.error('Upload failed', error);
-      message.textContent = '❌ Upload failed. Please try again.';
+      message.textContent = ' Upload failed.';
     }
   });
 
-  // Handle album creation
+  // Create album
   createBtn.addEventListener('click', async () => {
-    if (albumCreated) return;
-
     try {
-      const response = await fetch('load-images.php');
+      // Cache-busting trick
+      const response = await fetch('load-images.php?ts=' + Date.now());
       const imagesData = await response.json();
 
       if (!imagesData.length) {
-        alert("Please upload some images.");
+        alert(" No images found.");
         return;
       }
 
       if (imagesData.length < 6) {
-        alert("Please upload at least 6 images to view the album.");
+        alert(" Please upload at least 6 images to view the album.");
         return;
       }
 
       albumContainer.innerHTML = '';
+      pages = [];
       currentPage = 0;
 
-      function getImageHTML(index) {
+      const getImageHTML = (index) => {
         return imagesData[index]
-          ? `<img src="images/${imagesData[index]}" alt="">`
+          ? `<img src="images/${imagesData[index]}?ts=${Date.now()}" alt="">`
           : '';
-      }
+      };
 
-      // Create flipbook pages: 3 images per side
       for (let i = 0; i < imagesData.length; i += 6) {
         const page = document.createElement('div');
         page.classList.add('page');
@@ -88,30 +91,33 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         `;
 
+        page.style.zIndex = `${imagesData.length - i}`;
         albumContainer.appendChild(page);
+        pages.push(page);
       }
 
-      // Flip navigation logic
-      const pages = document.querySelectorAll('.page');
+      alert("Album created. Use next/prev buttons to flip.");
 
-      nextPageBtn.addEventListener('click', () => {
+      // Navigation
+      nextPageBtn.onclick = () => {
         if (currentPage < pages.length) {
           pages[currentPage].classList.add('flipped');
+          pages[currentPage].style.zIndex = 1000 + currentPage;
           currentPage++;
         }
-      });
+      };
 
-      prevPageBtn.addEventListener('click', () => {
+      prevPageBtn.onclick = () => {
         if (currentPage > 0) {
           currentPage--;
           pages[currentPage].classList.remove('flipped');
+          pages[currentPage].style.zIndex = 1000 - currentPage;
         }
-      });
+      };
 
-      albumCreated = true;
     } catch (error) {
-      console.error('Failed to load images', error);
-      alert("⚠️ Failed to load album. Please try again.");
+      console.error('Album creation failed', error);
+      alert(" Could not load album.");
     }
   });
 });
